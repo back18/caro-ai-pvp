@@ -4,10 +4,10 @@ namespace Caro.Engine;
 
 /// <summary>
 /// Gap-aware threat primitives. A completion is an empty cell whose single
-/// fill turns the line through a player's stone into an exact five (Caro
-/// rules: exactly five stones, not both ends blocked, no overline
-/// extension). Split shapes like XX.XX and .XX.X. participate, unlike plain
-/// contiguous counting.
+/// fill turns the line through a player's stone into a run of five or more
+/// (freestyle rules: overlines win and end blocking is irrelevant). Split
+/// shapes like XX.XX and .XX.X. participate, unlike plain contiguous
+/// counting.
 /// </summary>
 internal static class PatternWindow
 {
@@ -16,7 +16,7 @@ internal static class PatternWindow
     public const sbyte LineEmpty = 0;
     public const sbyte LineOwn = 1;
 
-    // The window spans offsets -WinLength..+WinLength so any exact-five
+    // The window spans offsets -WinLength..+WinLength so any winning run
     // through the center plus both of its end-check cells is fully visible.
     public const int LineCenter = Constants.Board.WinLength;
     public const int LineLastIndex = Constants.Board.LineLength - 1;
@@ -98,18 +98,12 @@ internal static class PatternWindow
     }
 
     /// <summary>
-    /// Reports whether the span [lo,hi] is an exact five with at least one
-    /// open end (Caro rules).
+    /// Reports whether the span [lo,hi] is a winning run: freestyle rules
+    /// count five or more stones, and a run does not need an open end.
     /// </summary>
-    public static bool SpanIsFive(ReadOnlySpan<sbyte> line, int lo, int hi)
+    public static bool SpanIsWin(ReadOnlySpan<sbyte> line, int lo, int hi)
     {
-        if (hi - lo + 1 != Constants.Board.WinLength)
-        {
-            return false;
-        }
-        bool beforeBlocked = lo == 0 || line[lo - 1] == LineOpp;
-        bool afterBlocked = hi == LineLastIndex || line[hi + 1] == LineOpp;
-        return !beforeBlocked || !afterBlocked;
+        return hi - lo + 1 >= Constants.Board.WinLength;
     }
 
     /// <summary>
@@ -142,7 +136,7 @@ internal static class PatternWindow
                 continue;
             }
             SpanThrough(line, i, out int l2, out int h2);
-            if (SpanIsFive(line, l2, h2))
+            if (SpanIsWin(line, l2, h2))
             {
                 comps++;
             }

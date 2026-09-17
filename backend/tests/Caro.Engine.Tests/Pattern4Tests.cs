@@ -79,11 +79,11 @@ public class Pattern4Tests
             .PlaceStone(10, 8, Player.Blue);
         SearchBoard sb = new(b);
         Pattern4 result = Pattern4Classifier.ClassifyDirection(sb, 9, 8, 1, 0, Player.Red);
-        Assert.Equal(Pattern4.None, result);
+        Assert.Equal(Pattern4.Exactly5, result);
     }
 
     [Fact]
-    public void ClassifyDirectionOverline()
+    public void ClassifyDirectionOverlineCountsAsFive()
     {
         Board b = Board.NewBoard()
             .PlaceStone(5, 8, Player.Red)
@@ -93,7 +93,7 @@ public class Pattern4Tests
             .PlaceStone(9, 8, Player.Red);
         SearchBoard sb = new(b);
         Pattern4 result = Pattern4Classifier.ClassifyDirection(sb, 10, 8, 1, 0, Player.Red);
-        Assert.Equal(Pattern4.Overline, result);
+        Assert.Equal(Pattern4.Exactly5, result);
     }
 
     [Fact]

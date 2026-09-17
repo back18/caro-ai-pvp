@@ -5,8 +5,7 @@ namespace Caro.Engine;
 public enum Pattern4
 {
     // Values must stay distinct: the previous enum aliased P4Flex3 with
-    // P4Block4 and P4Overline with P4None, which silently corrupted
-    // equality-based checks.
+    // P4Block4, which silently corrupted equality-based checks.
     None = 0,
     Flex1 = 1,
     Flex2 = 3,
@@ -16,7 +15,6 @@ public enum Pattern4
     Flex4 = 7,
     Block4 = 8,
     Exactly5 = 9,
-    Overline = 10,
 }
 
 public struct PlayerPattern4
@@ -43,11 +41,7 @@ public static class Pattern4Classifier
         PatternWindow.ExtractLine(sb, x, y, player, dx, dy, line);
 
         PatternWindow.SpanThrough(line, -1, out int lo, out int hi);
-        if (hi - lo + 1 > Constants.Board.WinLength)
-        {
-            return Pattern4.Overline;
-        }
-        if (PatternWindow.SpanIsFive(line, lo, hi))
+        if (PatternWindow.SpanIsWin(line, lo, hi))
         {
             return Pattern4.Exactly5;
         }

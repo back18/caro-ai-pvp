@@ -53,7 +53,7 @@ public class WinTests
     }
 
     [Fact]
-    public void WinDetectorSixNotWin()
+    public void WinDetectorOverlineWins()
     {
         Board b = Board.NewBoard();
         for (int x = 3; x < 9; x++)
@@ -61,11 +61,11 @@ public class WinTests
             b = b.PlaceStone(x, 5, Player.Red);
         }
         WinResult result = WinDetector.CheckWin(b);
-        Assert.False(result.HasWinner, "6 in a row should not win in Caro (overline)");
+        Assert.True(result.HasWinner, "six in a row wins under freestyle rules");
     }
 
     [Fact]
-    public void WinDetectorBlockedEnds()
+    public void WinDetectorBothEndsBlockedWins()
     {
         Board b = Board.NewBoard();
         for (int x = 3; x < 8; x++)
@@ -75,7 +75,7 @@ public class WinTests
         b = b.PlaceStone(2, 5, Player.Blue);
         b = b.PlaceStone(8, 5, Player.Blue);
         WinResult result = WinDetector.CheckWin(b);
-        Assert.False(result.HasWinner, "blocked five should not win in Caro");
+        Assert.True(result.HasWinner, "a five wins even with both ends blocked under freestyle rules");
     }
 
     [Fact]

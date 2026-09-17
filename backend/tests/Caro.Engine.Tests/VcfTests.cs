@@ -80,12 +80,10 @@ public class VcfTests
         sb.MakeMove(8, 5, Player.Red);
         List<Position> blocks = Vcf.FindFourBlocks(sb, 8, 5, Player.Red);
         sb.UnmakeMove();
-        // The completion cell (4,5) plus the end-block defense (3,5): with
-        // (9,5) already blue, red taking (3,5) leaves the would-be five
-        // both-ends-blocked, which is dead under Caro rules.
-        Assert.Equal(2, blocks.Count);
+        // Only the completion cell. Freestyle rules count five-or-more, so
+        // the Caro end-block defense (3,5) does not refute the five at all.
+        Assert.Single(blocks);
         Assert.Contains(new Position(4, 5), blocks);
-        Assert.Contains(new Position(3, 5), blocks);
     }
 
     [Fact]
@@ -250,7 +248,7 @@ public class VcfTests
     }
 
     [Fact]
-    public void FindFourBlocksRejectsOverline()
+    public void FindFourBlocksCountsOverlineCompletion()
     {
         Board b = Board.NewBoard()
             .PlaceStone(5, 5, Player.Red)
@@ -264,12 +262,15 @@ public class VcfTests
         List<Position> blocks = Vcf.FindFourBlocks(sb, 8, 5, Player.Red);
         sb.UnmakeMove();
 
-        Assert.Single(blocks);
-        Assert.Equal(new Position(4, 5), blocks[0]);
+        // (4,5) completes exactly five; (9,5) completes a six, which wins
+        // under freestyle rules instead of being rejected as an overline.
+        Assert.Equal(2, blocks.Count);
+        Assert.Contains(new Position(4, 5), blocks);
+        Assert.Contains(new Position(9, 5), blocks);
     }
 
     [Fact]
-    public void FindFourBlocksRejectsOverlineBothEnds()
+    public void FindFourBlocksCountsBothEndsOverline()
     {
         Board b = Board.NewBoard()
             .PlaceStone(4, 5, Player.Red)
@@ -284,11 +285,16 @@ public class VcfTests
         List<Position> blocks = Vcf.FindFourBlocks(sb, 7, 5, Player.Red);
         sb.UnmakeMove();
 
-        Assert.Single(blocks);
+        // Filling the gap (8,5) yields a seven-in-a-row and (3,5) completes a
+        // five. (11,5) does not qualify: the empty (8,5) still separates it
+        // from the centre's run, so it never joins a five through the centre.
+        Assert.Equal(2, blocks.Count);
+        Assert.Contains(new Position(3, 5), blocks);
+        Assert.Contains(new Position(8, 5), blocks);
     }
 
     [Fact]
-    public void FindFourBlocksBothEndsOverline()
+    public void FindFourBlocksSplitRunCompletions()
     {
         Board b = Board.NewBoard()
             .PlaceStone(0, 5, Player.Red)
@@ -302,7 +308,11 @@ public class VcfTests
         sb.MakeMove(5, 5, Player.Red);
         List<Position> blocks = Vcf.FindFourBlocks(sb, 5, 5, Player.Red);
         sb.UnmakeMove();
-        Assert.Empty(blocks);
+
+        // (1,5) bridges 0..5 into six; (6,5) bridges 2..7 into six.
+        Assert.Equal(2, blocks.Count);
+        Assert.Contains(new Position(1, 5), blocks);
+        Assert.Contains(new Position(6, 5), blocks);
     }
 
     [Fact]

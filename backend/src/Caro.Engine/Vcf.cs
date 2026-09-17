@@ -24,6 +24,30 @@ internal sealed class VCFSolver(SearchBoard sb, Player attacker, TimeMonitor mon
 
         List<Position> candidates = Candidates.GetCandidates(sb, Constants.Board.MaxSearchRadius);
 
+        // Immediate wins first, and without placing the stone: WouldWin
+        // already counts the queried cell as the mover's, so this pass costs
+        // only a board scan per candidate. Candidate order is spatial rather
+        // than by depth, so without this pass a forcing chain reachable from
+        // an early candidate can mask a one-move win sitting later in the
+        // list.
+        foreach (Position c in candidates)
+        {
+            if (monitor.ShouldStop())
+            {
+                _timedOut = true;
+                return false;
+            }
+
+            _nodes++;
+            if (MoveOrdering.WouldWin(sb, c.X, c.Y, attacker))
+            {
+                _winX = c.X;
+                _winY = c.Y;
+                _chainDepth = startDepth - depth + 1;
+                return true;
+            }
+        }
+
         foreach (Position c in candidates)
         {
             if (monitor.ShouldStop())
@@ -34,15 +58,6 @@ internal sealed class VCFSolver(SearchBoard sb, Player attacker, TimeMonitor mon
 
             sb.MakeMove(c.X, c.Y, attacker);
             _nodes++;
-
-            if (MoveOrdering.WouldWin(sb, c.X, c.Y, attacker))
-            {
-                sb.UnmakeMove();
-                _winX = c.X;
-                _winY = c.Y;
-                _chainDepth = startDepth - depth + 1;
-                return true;
-            }
 
             List<Position> blocks = Vcf.FindFourBlocks(sb, c.X, c.Y, attacker);
             if (blocks.Count == 0)
@@ -170,13 +185,8 @@ public static class Vcf
 
     /// <summary>
     /// Returns every opponent reply that survives the four created by
-    /// placing attacker at (x,y): the completion cells, plus the end-block
-    /// cells. Under Caro rules a five with both ends blocked is dead, so
-    /// when one end of a would-be five is already blocked the defender can
-    /// kill it by taking the remaining open end instead of the completion
-    /// cell. Missing those replies made the solver claim forced wins the
-    /// opponent refutes by end-blocking (docs/artifacts/tournaments/
-    /// ANOMALIES.md, finding 1). Returns empty if no four was created.
+    /// placing attacker at (x,y): the completion cells. Returns empty if no
+    /// four was created.
     /// </summary>
     internal static List<Position> FindFourBlocks(SearchBoard sb, int x, int y, Player attacker)
     {
@@ -193,22 +203,12 @@ public static class Vcf
                     continue;
                 }
                 PatternWindow.SpanThrough(line, i, out int lo, out int hi);
-                if (!PatternWindow.SpanIsFive(line, lo, hi))
+                if (!PatternWindow.SpanIsWin(line, lo, hi))
                 {
                     continue;
                 }
 
                 Add(dx, dy, i);
-                bool beforeBlocked = lo == 0 || line[lo - 1] == PatternWindow.LineOpp;
-                bool afterBlocked = hi == PatternWindow.LineLastIndex || line[hi + 1] == PatternWindow.LineOpp;
-                if (beforeBlocked && !afterBlocked)
-                {
-                    Add(dx, dy, hi + 1);
-                }
-                else if (afterBlocked && !beforeBlocked)
-                {
-                    Add(dx, dy, lo - 1);
-                }
             }
         }
         return blocks;

@@ -18,7 +18,7 @@ public static partial class Constants
         public const int MaxEval = 25_000;
         public const int WinScore = 30_000;
 
-        // Eval-side aliases: an exactly-5 pattern scores as a win, and the
+        // Eval-side aliases: a winning run scores as a win, and the
         // corrected eval clamps to MaxEval.
         public const int FiveScore = WinScore;
         public const int MaxCorrectedEval = MaxEval;

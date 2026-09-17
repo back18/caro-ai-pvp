@@ -164,22 +164,33 @@ public class LmrGuardTests
         List<Position> candidates = Candidates.GetCandidates(sb, Constants.Board.MaxSearchRadius);
 
         MovePicker picker = new(candidates, sb, Player.Red, 6, null, new SearchHeuristics(), new Position(-1, -1));
-        bool sawTactical = false;
+        List<Position> winning = [];
         bool sawQuiet = false;
         while (picker.Next(out Position m))
         {
-            if (picker.LastMoveTactical())
+            sb.MakeMove(m.X, m.Y, Player.Red);
+            bool wins = MoveOrdering.WouldWin(sb, m.X, m.Y, Player.Red);
+            sb.UnmakeMove();
+
+            if (wins)
             {
-                sawTactical = true;
-                Assert.True(MoveOrdering.WouldWin(sb, m.X, m.Y, Player.Red),
-                    "only winning completions may be flagged tactical from the winning stage");
+                winning.Add(m);
+                Assert.True(picker.LastMoveTactical(),
+                    "a winning completion must be flagged tactical so LMR never reduces it");
             }
-            else
+            else if (!picker.LastMoveTactical())
             {
                 sawQuiet = true;
             }
         }
-        Assert.True(sawTactical, "winning completions must be flagged");
+
+        // LastMoveTactical spans the winning, must-block and threat stages, so
+        // it does not imply a win; a threat-stage move like the gap of R.RRRR
+        // is tactical without completing a five. The property that must hold
+        // is the converse, checked above.
+        Assert.Equal(2, winning.Count);
+        Assert.Contains(new Position(2, 5), winning);
+        Assert.Contains(new Position(7, 5), winning);
         Assert.True(sawQuiet, "quiet moves must not be flagged");
     }
 

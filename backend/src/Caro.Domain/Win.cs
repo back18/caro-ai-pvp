@@ -79,25 +79,7 @@ public static class WinDetector
             }
 
             int total = 1 + positive + negative;
-            if (total != Constants.Board.WinLength)
-            {
-                continue;
-            }
-
-            // Caro: both ends blocked = no win
-            int afterX = x + dx * (positive + 1);
-            int afterY = y + dy * (positive + 1);
-            int beforeX = x - dx * (negative + 1);
-            int beforeY = y - dy * (negative + 1);
-
-            bool afterBlocked = afterX < 0 || afterX >= Constants.Board.Size
-                || afterY < 0 || afterY >= Constants.Board.Size
-                || b.GetPlayerAt(afterX, afterY) != Player.None;
-            bool beforeBlocked = beforeX < 0 || beforeX >= Constants.Board.Size
-                || beforeY < 0 || beforeY >= Constants.Board.Size
-                || b.GetPlayerAt(beforeX, beforeY) != Player.None;
-
-            if (afterBlocked && beforeBlocked)
+            if (total < Constants.Board.WinLength)
             {
                 continue;
             }

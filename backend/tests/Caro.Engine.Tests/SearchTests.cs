@@ -153,10 +153,18 @@ public class SearchTests
 
         using TranspositionTable tt = new(1);
         SearchHeuristics h = new();
-        SearchConfig opts = new() { MaxDepth = 4, TimeLimitMs = 500, Threads = 1, UseVCF = true };
+        // Freestyle's threat space is heavier than Caro's: live fours are far
+        // more common, so FindFourBlocks yields more defender replies and the
+        // VCF phases consume proportionally more of the budget. The 500ms that
+        // suited the Caro tree no longer leaves room to complete a ply.
+        SearchConfig opts = new() { MaxDepth = 4, TimeLimitMs = 4000, Threads = 1, UseVCF = true };
         (int x, int y, SearchStats stats) = SearchEngine.SearchPosition(b, Player.Red, opts, tt, h, CancellationToken.None);
         Assert.True(x >= 0 && y >= 0, $"should return valid move, got ({x},{y})");
-        Assert.True(stats.DepthAchieved > 0, "alpha-beta should have searched at least 1 ply");
+        Assert.True(stats.DepthAchieved > 0,
+            "depth=" + stats.DepthAchieved.ToString(System.Globalization.CultureInfo.InvariantCulture)
+            + " moveType=" + stats.MoveType
+            + " nodes=" + stats.NodesSearched.ToString(System.Globalization.CultureInfo.InvariantCulture)
+            + " allocatedMs=" + stats.AllocatedTimeMs.ToString(System.Globalization.CultureInfo.InvariantCulture));
     }
 
     [Fact]

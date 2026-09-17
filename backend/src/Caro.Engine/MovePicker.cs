@@ -350,22 +350,7 @@ public static class MoveOrdering
                 negative++;
             }
 
-            if (1 + positive + negative != Constants.Board.WinLength)
-            {
-                continue;
-            }
-
-            int afterX = x + dx * (positive + 1);
-            int afterY = y + dy * (positive + 1);
-            int beforeX = x - dx * (negative + 1);
-            int beforeY = y - dy * (negative + 1);
-
-            bool afterBlocked = afterX < 0 || afterX >= Constants.Board.Size || afterY < 0 || afterY >= Constants.Board.Size ||
-                (sb.PlayerAt(afterX, afterY) != Player.None && sb.PlayerAt(afterX, afterY) != player);
-            bool beforeBlocked = beforeX < 0 || beforeX >= Constants.Board.Size || beforeY < 0 || beforeY >= Constants.Board.Size ||
-                (sb.PlayerAt(beforeX, beforeY) != Player.None && sb.PlayerAt(beforeX, beforeY) != player);
-
-            if (afterBlocked && beforeBlocked)
+            if (1 + positive + negative < Constants.Board.WinLength)
             {
                 continue;
             }
