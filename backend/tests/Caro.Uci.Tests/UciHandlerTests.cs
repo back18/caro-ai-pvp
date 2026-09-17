@@ -39,7 +39,7 @@ public class NotationTests
     {
         Assert.Equal("aa", Notation.MoveToString(0, 0));
         Assert.Equal("bd", Notation.MoveToString(3, 1));
-        Assert.Equal("pp", Notation.MoveToString(15, 15));
+        Assert.Equal("oo", Notation.MoveToString(14, 14));
     }
 
     [Fact]

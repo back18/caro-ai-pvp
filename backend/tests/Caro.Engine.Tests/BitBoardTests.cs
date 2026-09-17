@@ -14,8 +14,8 @@ public class BitBoardTests
         Assert.True(bb.Get(0, 0));
         Assert.False(bb.Get(1, 0));
 
-        bb.Set(15, 15);
-        Assert.True(bb.Get(15, 15));
+        bb.Set(14, 14);
+        Assert.True(bb.Get(14, 14));
     }
 
     [Fact]

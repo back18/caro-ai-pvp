@@ -222,7 +222,7 @@ public class VcfTests
             .PlaceStone(8, 4, Player.Red)
             .PlaceStone(6, 6, Player.Blue).PlaceStone(7, 6, Player.Blue)
             .PlaceStone(8, 6, Player.Blue).PlaceStone(10, 6, Player.Blue)
-            .PlaceStone(15, 15, Player.Red);
+            .PlaceStone(14, 14, Player.Red);
 
         (_, _, VCFResult result) = Vcf.SolveVCF(b, Player.Red, 5000, CancellationToken.None);
         Assert.Equal(VCFResult.NoWin, result);
@@ -243,7 +243,7 @@ public class VcfTests
             .PlaceStone(11, 5, Player.Blue)
             .PlaceStone(12, 5, Player.Blue)
             .PlaceStone(13, 5, Player.Blue)
-            .PlaceStone(15, 15, Player.Blue);
+            .PlaceStone(14, 14, Player.Blue);
 
         (_, _, VCFResult result) = Vcf.SolveVCF(b, Player.Red, 5000, CancellationToken.None);
         Assert.Equal(VCFResult.NoWin, result);

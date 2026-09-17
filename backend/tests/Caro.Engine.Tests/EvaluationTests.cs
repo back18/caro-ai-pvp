@@ -102,8 +102,10 @@ public class EvaluationTests
         Assert.Equal(2, red.Flex3Count);
 
         // 13,000 B4F3 bonus + 1x5,000 block4 + 2x1,000 flex3 = 20,000 red,
-        // 20 blue flex1, red center 196, blue center 28.
-        Assert.Equal(20_148, Evaluation.Evaluate(sb, Player.Red));
+        // minus 20 blue flex1, plus the center terms. CenterBonus() derives
+        // both its span and its midpoint from Board.Size, so the total tracks
+        // the board dimensions rather than being a fixed constant.
+        Assert.Equal(20_144, Evaluation.Evaluate(sb, Player.Red));
     }
 
     [Fact]

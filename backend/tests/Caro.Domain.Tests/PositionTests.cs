@@ -8,8 +8,9 @@ public class PositionTests
     public static TheoryData<int, int, bool> ValidCases => new()
     {
         { 0, 0, true },
-        { 8, 8, true },
-        { 15, 15, true },
+        { 7, 7, true },
+        { 14, 14, true },
+        { 15, 15, false },
         { -1, 0, false },
         { 0, 16, false },
         { 16, 16, false },

@@ -108,7 +108,7 @@ public class SearchEdgeCasesTests
             .PlaceStone(6, 6, Player.Red)
             .PlaceStone(7, 6, Player.Red)
             .PlaceStone(0, 0, Player.Blue)
-            .PlaceStone(15, 15, Player.Blue);
+            .PlaceStone(14, 14, Player.Blue);
 
         using TranspositionTable tt = new(1);
         (int x, int y, _) = SearchEngine.SearchPosition(b, Player.Blue,
@@ -132,7 +132,7 @@ public class SearchEdgeCasesTests
             .PlaceStone(6, 6, Player.Red)
             .PlaceStone(7, 6, Player.Red)
             .PlaceStone(0, 0, Player.Blue)
-            .PlaceStone(15, 15, Player.Blue);
+            .PlaceStone(14, 14, Player.Blue);
 
         using TranspositionTable tt = new(1);
         (int x, int y, SearchStats stats) = ParallelSearch.Run(b, Player.Blue,
@@ -162,7 +162,7 @@ public class SearchEdgeCasesTests
             .PlaceStone(7, 8, Player.Red)
             .PlaceStone(8, 8, Player.Red)
             .PlaceStone(0, 0, Player.Blue)
-            .PlaceStone(15, 15, Player.Blue);
+            .PlaceStone(14, 14, Player.Blue);
 
         using TranspositionTable tt = new(1);
         (int x, int y, _) = SearchEngine.SearchPosition(b, Player.Red,

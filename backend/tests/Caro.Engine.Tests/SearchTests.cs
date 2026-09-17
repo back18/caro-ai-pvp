@@ -53,7 +53,7 @@ public class SearchTests
             .PlaceStone(3, 3, Player.Red).PlaceStone(4, 4, Player.Red)
             .PlaceStone(5, 5, Player.Blue).PlaceStone(6, 5, Player.Blue)
             .PlaceStone(7, 5, Player.Blue)
-            .PlaceStone(0, 0, Player.Red).PlaceStone(15, 15, Player.Blue);
+            .PlaceStone(0, 0, Player.Red).PlaceStone(14, 14, Player.Blue);
 
         using TranspositionTable tt = new(1);
         SearchHeuristics h = new();
