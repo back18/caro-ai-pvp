@@ -25,6 +25,15 @@ public struct SearchStats
     public long NodesSearched { get; set; }
     public double NodesPerSecond { get; set; }
     public int SearchScore { get; set; }
+
+    /// <summary>
+    /// Whether <see cref="SearchScore"/> represents a proven forced win rather
+    /// than a heuristic judgement. Derived rather than stored so every
+    /// construction site agrees by construction, and so callers outside this
+    /// assembly need no knowledge of the score encoding.
+    /// </summary>
+    public bool HasForcedWin => MateScore.IsForcedWinScore(SearchScore);
+
     public string MoveType { get; set; } = "";
     public double TableHitRate { get; set; }
     public long AllocatedTimeMs { get; set; }
