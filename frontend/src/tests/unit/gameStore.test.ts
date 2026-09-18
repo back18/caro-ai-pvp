@@ -62,8 +62,8 @@ describe('GameStore Types', () => {
       const getIndex = (x: number, y: number) => y * GameConfig.boardSize + x;
 
       expect(getIndex(0, 0)).toBe(0);
-      expect(getIndex(7, 8)).toBe(135);
-      expect(getIndex(15, 15)).toBe(255);
+      expect(getIndex(7, 8)).toBe(127);
+      expect(getIndex(14, 14)).toBe(224);
     });
 
     it('should calculate coordinates from index correctly', () => {
@@ -73,8 +73,8 @@ describe('GameStore Types', () => {
       });
 
       expect(getCoords(0)).toEqual({ x: 0, y: 0 });
-      expect(getCoords(135)).toEqual({ x: 7, y: 8 });
-      expect(getCoords(255)).toEqual({ x: 15, y: 15 });
+      expect(getCoords(127)).toEqual({ x: 7, y: 8 });
+      expect(getCoords(224)).toEqual({ x: 14, y: 14 });
     });
   });
 

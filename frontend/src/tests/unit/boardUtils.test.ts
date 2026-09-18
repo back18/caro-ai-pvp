@@ -65,9 +65,9 @@ describe('boardUtils', () => {
     it('should return true for valid coordinates', () => {
       expect(isValidCell(0, 0)).toBe(true);
       expect(isValidCell(7, 7)).toBe(true);
-      expect(isValidCell(15, 15)).toBe(true);
-      expect(isValidCell(0, 15)).toBe(true);
-      expect(isValidCell(15, 0)).toBe(true);
+      expect(isValidCell(14, 14)).toBe(true);
+      expect(isValidCell(0, 14)).toBe(true);
+      expect(isValidCell(14, 0)).toBe(true);
       expect(isValidCell(5, 10)).toBe(true);
     });
 
@@ -84,7 +84,7 @@ describe('boardUtils', () => {
 
     it('should handle edge cases correctly', () => {
       expect(isValidCell(0, 0)).toBe(true);
-      expect(isValidCell(15, 15)).toBe(true);
+      expect(isValidCell(14, 14)).toBe(true);
       expect(isValidCell(0, GameConfig.boardSize)).toBe(false);
       expect(isValidCell(GameConfig.boardSize, 0)).toBe(false);
       expect(isValidCell(-0.1, 0)).toBe(false);
@@ -106,17 +106,19 @@ describe('boardUtils', () => {
 
     it('should handle zero correctly', () => {
       expect(isValidCell(0, 0)).toBe(true);
-      expect(isValidCell(0, 15)).toBe(true);
-      expect(isValidCell(15, 0)).toBe(true);
+      expect(isValidCell(0, 14)).toBe(true);
+      expect(isValidCell(14, 0)).toBe(true);
+      expect(isValidCell(0, GameConfig.boardSize)).toBe(false);
+      expect(isValidCell(GameConfig.boardSize, 0)).toBe(false);
     });
   });
 
   describe('toAlgebraic', () => {
     it('should format corners as column letter plus row number', () => {
       expect(toAlgebraic(0, 0)).toBe('a1');
-      expect(toAlgebraic(15, 0)).toBe('p1');
-      expect(toAlgebraic(0, 15)).toBe('a16');
-      expect(toAlgebraic(15, 15)).toBe('p16');
+      expect(toAlgebraic(14, 0)).toBe('o1');
+      expect(toAlgebraic(0, 14)).toBe('a15');
+      expect(toAlgebraic(14, 14)).toBe('o15');
     });
 
     it('should format center cells', () => {
@@ -140,7 +142,7 @@ describe('boardUtils', () => {
   describe('computeCellSize', () => {
     it('should compute cell size for a typical mobile viewport', () => {
       const size = computeCellSize(375);
-      expect(size).toBe(Math.floor((375 * 0.95) / 16));
+      expect(size).toBe(Math.floor((375 * 0.95) / GameConfig.boardSize));
     });
 
     it('should cap at maxCellSize on large viewports', () => {

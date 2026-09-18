@@ -9,7 +9,7 @@
 	import { soundManager } from '$lib/utils/sound';
 	import { ApiConfig, GameConfig, UIConfig, E2EConfig, DEFAULT_TIME_CONTROL, timeControlOption } from '$lib/config';
 	import type { Cell } from '$lib/types/game';
-	import type { GameMode, TimeControl, UCIConnectionStatus, DifficultyLevel } from '$lib/types/game';
+	import type { GameMode, TimeControl, UCIConnectionStatus, DifficultyLevel, Player } from '$lib/types/game';
 	import { difficultyName } from '$lib/types/game';
 
 	let store = new GameStore();
@@ -123,6 +123,20 @@
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Appends one move to the local history, keyed by the server's move number.
+	 *
+	 * The list has to stay a prefix of the server's history. A player-vs-AI undo
+	 * takes back a whole turn, so a list trimmed by guessing the ply count drifts
+	 * by one and every later move is recorded against the wrong number. Cutting
+	 * back to moveNumber - 1 first makes the list self-healing instead.
+	 */
+	function recordMove(state: Record<string, any>, x: number, y: number, player: Player) {
+		const kept = Math.min(store.moveHistory.length, state.moveNumber - 1);
+		store.moveHistory = store.moveHistory.slice(0, kept);
+		store.moveHistory.push({ moveNumber: state.moveNumber, player, x, y });
 	}
 
 	onMount(() => {
@@ -243,12 +257,7 @@
 
 			syncGameState(data.state);
 
-			store.moveHistory.push({
-				moveNumber: data.state.moveNumber,
-				player: previousPlayer,
-				x,
-				y
-			});
+			recordMove(data.state, x, y, previousPlayer);
 
 			lastMove = { x, y };
 			if (data.state.isGameOver) {
@@ -330,14 +339,13 @@
 				syncGameState(data.state);
 
 				if (aiMove) {
-					store.moveHistory.push({
-						moveNumber: data.state.moveNumber,
-						player: aiPlayer as 'red' | 'blue',
-						x: aiMove.x,
-						y: aiMove.y
-					});
+					recordMove(data.state, aiMove.x, aiMove.y, aiPlayer);
 					lastMove = { x: aiMove.x, y: aiMove.y };
 					soundManager.playStoneSound(aiPlayer as 'red' | 'blue');
+				} else {
+					// The reply could not be located by diffing; the board above is
+					// still synced, but the notation now lags the server.
+					console.warn('Could not locate the engine move in the returned board');
 				}
 
 				if (data.state.isGameOver) {
@@ -374,8 +382,13 @@
 			const data = await response.json();
 			syncGameState(data.state);
 			winningLine = [];
-			// Keep notation in sync with the rolled-back board.
-			store.moveHistory.pop();
+			// The server decides how many plies a player-vs-AI undo takes back (a
+			// whole turn, so the human is on the move again). Trim to the count it
+			// reports rather than assuming a single ply.
+			store.moveHistory = store.moveHistory.slice(
+				0,
+				Math.min(store.moveHistory.length, data.state.moveNumber)
+			);
 			const last = store.moveHistory[store.moveHistory.length - 1];
 			lastMove = last ? { x: last.x, y: last.y } : null;
 		} catch (err) {

@@ -10,16 +10,16 @@ describe('UCI Coordinate Conversion', () => {
       expect(toUCI(0, 0)).toBe('aa');
     });
 
-    it('should convert max column (15,0) to ap', () => {
-      expect(toUCI(15, 0)).toBe('ap');
+    it('should convert max column (14,0) to ao', () => {
+      expect(toUCI(14, 0)).toBe('ao');
     });
 
-    it('should convert max row (0,15) to pa', () => {
-      expect(toUCI(0, 15)).toBe('pa');
+    it('should convert max row (0,14) to oa', () => {
+      expect(toUCI(0, 14)).toBe('oa');
     });
 
-    it('should convert corner (15,15) to pp', () => {
-      expect(toUCI(15, 15)).toBe('pp');
+    it('should convert corner (14,14) to oo', () => {
+      expect(toUCI(14, 14)).toBe('oo');
     });
 
     it('should convert center (7,7) to hh', () => {
@@ -46,12 +46,12 @@ describe('UCI Coordinate Conversion', () => {
       expect(fromUCI('aa')).toEqual({ x: 0, y: 0 });
     });
 
-    it('should convert ap to (15,0)', () => {
-      expect(fromUCI('ap')).toEqual({ x: 15, y: 0 });
+    it('should convert ao to (14,0)', () => {
+      expect(fromUCI('ao')).toEqual({ x: 14, y: 0 });
     });
 
-    it('should convert pa to (0,15)', () => {
-      expect(fromUCI('pa')).toEqual({ x: 0, y: 15 });
+    it('should convert oa to (0,14)', () => {
+      expect(fromUCI('oa')).toEqual({ x: 0, y: 14 });
     });
 
     it('should convert hh to (7,7)', () => {
