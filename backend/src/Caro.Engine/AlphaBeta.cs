@@ -14,7 +14,8 @@ public static partial class SearchEngine
         SearchHeuristics heuristics,
         List<Position> candidates,
         TimeMonitor monitor,
-        Position? preferredMove)
+        Position? preferredMove,
+        PvTable pv)
     {
         monitor.AddNode();
         Position? ttMove;
@@ -55,14 +56,14 @@ public static partial class SearchEngine
             }
             else if (i == 0)
             {
-                score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, 1);
+                score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, 1, pv);
             }
             else
             {
-                score = -AlphaBeta(sb, player.Opponent(), depth - 1, -alpha - 1, -alpha, tt, heuristics, monitor, move, 1);
+                score = -AlphaBeta(sb, player.Opponent(), depth - 1, -alpha - 1, -alpha, tt, heuristics, monitor, move, 1, pv);
                 if (score > alpha && score < beta)
                 {
-                    score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, 1);
+                    score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, 1, pv);
                 }
             }
 
@@ -73,6 +74,7 @@ public static partial class SearchEngine
                 bestScore = score;
                 bestX = move.X;
                 bestY = move.Y;
+                pv.Record(0, move);
             }
             if (score > alpha)
             {
@@ -145,7 +147,8 @@ public static partial class SearchEngine
         SearchHeuristics heuristics,
         TimeMonitor monitor,
         Position prevMove,
-        int plyFromRoot)
+        int plyFromRoot,
+        PvTable pv)
     {
         monitor.AddNode();
         if (monitor.ShouldStop())
@@ -167,7 +170,7 @@ public static partial class SearchEngine
             sb.MakeNullMove();
             Position nullPrev = new(-1, -1);
             int nullScore = -AlphaBeta(sb, player.Opponent(), depth - 1 - Constants.Search.NullMoveReduction,
-                -beta, -beta + 1, tt, heuristics, monitor, nullPrev, plyFromRoot + 1);
+                -beta, -beta + 1, tt, heuristics, monitor, nullPrev, plyFromRoot + 1, pv);
             sb.UnmakeNullMove();
             if (nullScore >= beta && !monitor.ShouldStop())
             {
@@ -238,14 +241,14 @@ public static partial class SearchEngine
                 int newDepth = depth - 1 - reduction;
                 if (moveIdx == 0)
                 {
-                    score = -AlphaBeta(sb, player.Opponent(), newDepth, -beta, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1);
+                    score = -AlphaBeta(sb, player.Opponent(), newDepth, -beta, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1, pv);
                 }
                 else
                 {
-                    score = -AlphaBeta(sb, player.Opponent(), newDepth, -alpha - 1, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1);
+                    score = -AlphaBeta(sb, player.Opponent(), newDepth, -alpha - 1, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1, pv);
                     if (score > alpha && score < beta)
                     {
-                        score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1);
+                        score = -AlphaBeta(sb, player.Opponent(), depth - 1, -beta, -alpha, tt, heuristics, monitor, move, plyFromRoot + 1, pv);
                     }
                 }
             }
@@ -260,6 +263,12 @@ public static partial class SearchEngine
             }
             if (score > alpha)
             {
+                // Only a move that stays inside the window is the start of a
+                // real line; one that reaches beta refutes the node instead.
+                if (score < beta)
+                {
+                    pv.Record(plyFromRoot, move);
+                }
                 alpha = score;
             }
             if (alpha >= beta)

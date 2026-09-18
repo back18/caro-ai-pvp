@@ -3,12 +3,13 @@ using Caro.Domain;
 
 namespace Caro.Engine;
 
-internal readonly struct ParallelResult(int x, int y, int score, int depth)
+internal readonly struct ParallelResult(int x, int y, int score, int depth, Position[] pv)
 {
     public int X { get; } = x;
     public int Y { get; } = y;
     public int Score { get; } = score;
     public int Depth { get; } = depth;
+    public Position[] PrincipalVariation { get; } = pv;
 }
 
 public static class ParallelSearch
@@ -103,6 +104,8 @@ public static class ParallelSearch
             {
                 SearchBoard workerSB = new(b);
                 SearchHeuristics workerH = workerHeuristics[workerID];
+                PvTable workerPv = new(Math.Min(config.MaxDepth, Constants.Search.AbsoluteMaxDepth) + 2);
+                Position[] workerPvLine = [];
 
                 int prevScore = -Constants.Score.Infinity;
                 int completedDepth = 0;
@@ -145,7 +148,8 @@ public static class ParallelSearch
                     bool found = false;
                     for (int attempt = 0; attempt < Constants.Search.MaxAspirationAttempts; attempt++)
                     {
-                        (x, y, score) = SearchEngine.SearchRoot(workerSB, player, depth, a, bnd, tt, workerH, candidates, monitor, vcfPreferred);
+                        workerPv.ResetAll();
+                        (x, y, score) = SearchEngine.SearchRoot(workerSB, player, depth, a, bnd, tt, workerH, candidates, monitor, vcfPreferred, workerPv);
                         if (x < 0 || monitor.ShouldStop())
                         {
                             break;
@@ -168,8 +172,9 @@ public static class ParallelSearch
 
                     if (!found && !monitor.ShouldStop())
                     {
+                        workerPv.ResetAll();
                         (x, y, score) = SearchEngine.SearchRoot(workerSB, player, depth,
-                            -Constants.Score.Infinity, Constants.Score.Infinity, tt, workerH, candidates, monitor, vcfPreferred);
+                            -Constants.Score.Infinity, Constants.Score.Infinity, tt, workerH, candidates, monitor, vcfPreferred, workerPv);
                         if (x >= 0)
                         {
                             found = true;
@@ -185,7 +190,11 @@ public static class ParallelSearch
                     completedDepth = depth;
                     prevIterMs = lastIterMs;
                     lastIterMs = monitor.ElapsedMs() - iterStart;
-                    results.Add(new ParallelResult(x, y, score, depth));
+                    // Captured with the completed iteration, matching the
+                    // move it describes; a later partial iteration resets the
+                    // table and must not be published.
+                    workerPvLine = workerPv.Line(0);
+                    results.Add(new ParallelResult(x, y, score, depth, workerPvLine));
 
                     if (MateScore.IsForcedWinScore(score))
                     {
@@ -201,6 +210,7 @@ public static class ParallelSearch
         int bestY = candidates[0].Y;
         int bestScore = -Constants.Score.Infinity;
         int bestDepth = 0;
+        Position[] bestPv = [];
 
         foreach (ParallelResult r in results)
         {
@@ -210,6 +220,7 @@ public static class ParallelSearch
                 bestX = r.X;
                 bestY = r.Y;
                 bestDepth = r.Depth;
+                bestPv = r.PrincipalVariation;
             }
         }
 
@@ -253,6 +264,7 @@ public static class ParallelSearch
             AllocatedTimeMs = config.TimeLimitMs,
             ThreadCount = numWorkers,
             MoveType = moveType,
+            PrincipalVariation = bestPv,
         });
     }
 }

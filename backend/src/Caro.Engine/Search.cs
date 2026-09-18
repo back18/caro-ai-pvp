@@ -27,11 +27,13 @@ public static partial class SearchEngine
 
         int bestX = candidates[0].X;
         int bestY = candidates[0].Y;
+        PvTable pv = new(Math.Min(config.MaxDepth, Constants.Search.AbsoluteMaxDepth) + 2);
         using TimeMonitor monitor = new(config.TimeLimitMs, ctx);
 
         tt.ResetStats();
         int bestScore = -Constants.Score.Infinity;
         int completedDepth = 0;
+        Position[] principalVariation = [];
         int fullAlpha = -Constants.Score.Infinity;
         int fullBeta = Constants.Score.Infinity;
 
@@ -52,6 +54,7 @@ public static partial class SearchEngine
                         MoveType = MoveTypes.Vcf,
                         VcfDepth = vcf.ChainDepth,
                         VcfNodes = vcf.NodesSearched,
+                        PrincipalVariation = [new Position(vcf.X, vcf.Y)],
                     });
                 }
             }
@@ -109,7 +112,8 @@ public static partial class SearchEngine
             bool found = false;
             for (int attempt = 0; attempt < Constants.Search.MaxAspirationAttempts; attempt++)
             {
-                (x, y, score) = SearchRoot(sb, player, depth, a, betaBound, tt, heuristics, candidates, monitor, vcfPreferred);
+                pv.ResetAll();
+                (x, y, score) = SearchRoot(sb, player, depth, a, betaBound, tt, heuristics, candidates, monitor, vcfPreferred, pv);
                 if (x < 0 || monitor.ShouldStop())
                 {
                     break;
@@ -132,7 +136,8 @@ public static partial class SearchEngine
 
             if (!found && !monitor.ShouldStop())
             {
-                (x, y, score) = SearchRoot(sb, player, depth, fullAlpha, fullBeta, tt, heuristics, candidates, monitor, vcfPreferred);
+                pv.ResetAll();
+                (x, y, score) = SearchRoot(sb, player, depth, fullAlpha, fullBeta, tt, heuristics, candidates, monitor, vcfPreferred, pv);
                 if (x >= 0)
                 {
                     found = true;
@@ -145,6 +150,11 @@ public static partial class SearchEngine
                 bestY = y;
                 bestScore = score;
                 completedDepth = depth;
+                // Captured only alongside a completed iteration: a later
+                // iteration that runs out of time resets the table, and the
+                // reported line must never describe a search that did not
+                // finish.
+                principalVariation = pv.Line(0);
                 prevIterMs = lastIterMs;
                 lastIterMs = monitor.ElapsedMs() - iterStart;
                 if (MateScore.IsForcedWinScore(score))
@@ -196,6 +206,7 @@ public static partial class SearchEngine
             AllocatedTimeMs = config.TimeLimitMs,
             ThreadCount = 1,
             MoveType = moveType,
+            PrincipalVariation = principalVariation,
         });
     }
 }

@@ -1,3 +1,5 @@
+using Caro.Domain;
+
 namespace Caro.Engine;
 
 public struct SearchConfig
@@ -29,6 +31,22 @@ public struct SearchStats
     public int ThreadCount { get; set; }
     public int? VcfDepth { get; set; }
     public long? VcfNodes { get; set; }
+
+    /// <summary>
+    /// Best play found from the root, as the engine expects it to continue.
+    /// Empty when no depth finished in time or nothing was searched.
+    ///
+    /// Backed by a field rather than an initialised auto-property so that
+    /// <c>default(SearchStats)</c> — which the early-exit paths return —
+    /// still yields an empty array instead of null.
+    /// </summary>
+    public Position[] PrincipalVariation
+    {
+        get => _principalVariation ?? [];
+        set => _principalVariation = value;
+    }
+
+    private Position[]? _principalVariation;
 }
 
 public enum VCFResult

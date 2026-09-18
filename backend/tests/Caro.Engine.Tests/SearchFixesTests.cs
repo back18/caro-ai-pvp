@@ -111,7 +111,7 @@ public class SearchFixesTests
         using TimeMonitor monitor = new(5000, CancellationToken.None);
 
         // Quiet position: true score is far below alpha, so the root search must fail low.
-        (_, _, int score) = SearchEngine.SearchRoot(sb, Player.Red, 2, 24_000, 25_000, tt, heuristics, candidates, monitor, null);
+        (_, _, int score) = SearchEngine.SearchRoot(sb, Player.Red, 2, 24_000, 25_000, tt, heuristics, candidates, monitor, null, new PvTable(4));
         Assert.True(score <= 24_000, "precondition: search must fail low against a high alpha");
 
         Assert.True(tt.Lookup(sb.Hash(), out TTEntry entry), "root search must store its result");
