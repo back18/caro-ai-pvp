@@ -85,9 +85,9 @@ export const DIFFICULTY_NAMES = ['', 'Novice', 'Beginner', 'Intermediate', 'Adva
 export const GAME_MODE_AIVAI = 'aivai';
 
 export const BOARD = Object.freeze({
-	size: 16,
-	totalCells: 256,
-	columnLabels: 'abcdefghijklmnop'
+	size: 15,
+	totalCells: 225,
+	columnLabels: 'abcdefghijklmno'
 });
 
 export const TIME_CONTROLS = [
