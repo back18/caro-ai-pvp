@@ -7,7 +7,7 @@
 
 import { UCIConfig } from '$lib/config';
 
-// Valid coordinate letters span 'a' through the board width (a-p on 16
+// Valid coordinate letters span 'a' through the board width (a-o on 15
 // columns); derived so a board-size change cannot desync the parser.
 const firstCoordLetter = String.fromCharCode(UCIConfig.asciiLowerA);
 const lastCoordLetter = String.fromCharCode(UCIConfig.asciiLowerA + UCIConfig.maxRow - 1);

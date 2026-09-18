@@ -43,30 +43,6 @@
 	// fresh one.
 	let gameGeneration = 0;
 
-	const openRuleInvalid = $derived(() => {
-		if (store.currentPlayer !== 'red' || store.moveNumber !== GameConfig.openRuleSecondMoveNumber) {
-			return new Set<string>();
-		}
-		let redCount = 0;
-		let blueCount = 0;
-		let firstRedX = 0, firstRedY = 0;
-		for (const cell of store.board) {
-			if (cell.player === 'red') { redCount++; firstRedX = cell.x; firstRedY = cell.y; }
-			else if (cell.player === 'blue') { blueCount++; }
-		}
-		if (redCount !== 1 || blueCount > 1) return new Set<string>();
-		const invalid = new Set<string>();
-		for (const cell of store.board) {
-			if (cell.player !== 'none') continue;
-			const dx = Math.abs(cell.x - firstRedX);
-			const dy = Math.abs(cell.y - firstRedY);
-			if (dx < GameConfig.openRuleMinDistance && dy < GameConfig.openRuleMinDistance) {
-				invalid.add(`${cell.x},${cell.y}`);
-			}
-		}
-		return invalid;
-	});
-
 	function aiLabel(side: 'red' | 'blue'): string {
 		if (gameMode === 'pvp') return '';
 		const diff = side === 'red' ? redDifficulty : blueDifficulty;
@@ -482,7 +458,7 @@
 			label={aiLabel('blue')} />
 
 		<!-- Board -->
-		<Board board={store.board} onMove={handleMove} {winningLine} {lastMove} openRuleInvalid={openRuleInvalid()} />
+		<Board board={store.board} onMove={handleMove} {winningLine} {lastMove} />
 
 		<!-- Player timer (bottom) -->
 		<PlayerTimerStrip

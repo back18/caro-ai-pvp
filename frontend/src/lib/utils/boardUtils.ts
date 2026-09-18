@@ -6,7 +6,7 @@ export interface Point {
 }
 
 /**
- * Display notation: column letter (a-p) from x plus 1-based row number from y,
+ * Display notation: column letter (a-o) from x plus 1-based row number from y,
  * e.g. (7, 7) -> "h8". Matches the board's coordinate labels; the UCI wire
  * format (toUCI) stays double-letter.
  */

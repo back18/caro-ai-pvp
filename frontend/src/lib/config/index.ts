@@ -48,23 +48,17 @@ export const ApiConfig = {
 // --- Game rules ---
 
 export const GameConfig = {
-	/** Board size (16x16 grid) */
-	boardSize: 16,
+	/** Board size (15x15 grid) */
+	boardSize: 15,
 
-	/** Total number of cells on the board (16 * 16 = 256) */
-	totalCells: 256,
+	/** Total number of cells on the board (15 * 15 = 225) */
+	totalCells: 225,
 
-	/** Center position index (8 is center of 0-15 range) */
-	centerPosition: 8,
+	/** Center position index (7 is center of 0-14 range) */
+	centerPosition: 7,
 
 	/** Number of consecutive stones required to win */
 	winLength: 5,
-
-	/** Move number red's second stone is constrained by the open rule */
-	openRuleSecondMoveNumber: 2,
-
-	/** Minimum distance of red's second stone from the first */
-	openRuleMinDistance: 3,
 
 	/** Lowest selectable AI difficulty */
 	minDifficulty: 1,

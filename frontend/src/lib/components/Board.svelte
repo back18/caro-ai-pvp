@@ -12,10 +12,9 @@
 		onMove: (x: number, y: number) => void;
 		winningLine?: Array<{ x: number; y: number }>;
 		lastMove?: { x: number; y: number } | null;
-		openRuleInvalid?: Set<string>;
 	}
 
-	let { board, onMove, winningLine = [], lastMove = null, openRuleInvalid = new Set<string>() }: Props = $props();
+	let { board, onMove, winningLine = [], lastMove = null }: Props = $props();
 
 	let ghostPosition = $state<{ x: number; y: number } | null>(null);
 	let cellSize = $state(
@@ -112,13 +111,11 @@
 				<!-- Board cells for this row -->
 				{#each cols as _, x}
 					{@const cell = board[y * GameConfig.boardSize + x]}
-					{@const key = `${x},${y}`}
 					<CellComponent
 						x={x}
 						y={y}
 						player={cell.player}
 						isLastMove={lastMove !== null && x === lastMove.x && y === lastMove.y}
-						isOpenRuleInvalid={openRuleInvalid.has(key)}
 						{cellSize}
 						onclick={() => handleCellClick(x, y)} />
 				{/each}
