@@ -52,10 +52,6 @@ public sealed class GameState
         {
             throw new GameOverException();
         }
-        if (CurrentPlayer == Player.Red && !OpenRule.IsValidSecondMove(Board, x, y))
-        {
-            throw new OpenRuleException();
-        }
         Board newBoard = Board.PlaceStone(x, y, CurrentPlayer);
 
         Board[] history = new Board[BoardHistory.Length + 1];

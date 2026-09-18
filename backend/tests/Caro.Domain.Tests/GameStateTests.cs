@@ -87,36 +87,4 @@ public class GameStateTests
         Assert.False(g3.CanUndo());
     }
 
-    [Fact]
-    public void GameStateOpenRuleViolation()
-    {
-        GameState g = GameState.NewGameState(GameMode.PvP, "7+5", 420_000, 5);
-        GameState g2 = g.WithMove(8, 8);
-        GameState g3 = g2.WithMove(0, 0);
-        // Red's second move inside 5x5 zone (Chebyshev distance 2)
-        Assert.Throws<OpenRuleException>(() => g3.WithMove(10, 9));
-    }
-
-    [Fact]
-    public void GameStateOpenRuleValid()
-    {
-        GameState g = GameState.NewGameState(GameMode.PvP, "7+5", 420_000, 5);
-        GameState g2 = g.WithMove(8, 8);
-        GameState g3 = g2.WithMove(0, 0);
-        // Red's second move outside 5x5 zone (Chebyshev distance 3)
-        GameState g4 = g3.WithMove(11, 8);
-        Assert.Equal(Player.Blue, g4.CurrentPlayer);
-    }
-
-    [Fact]
-    public void GameStateOpenRuleNotAppliedAfterMoreMoves()
-    {
-        GameState g = GameState.NewGameState(GameMode.PvP, "7+5", 420_000, 5);
-        GameState g2 = g.WithMove(8, 8);
-        GameState g3 = g2.WithMove(0, 0);
-        GameState g4 = g3.WithMove(11, 8);
-        // Blue's second move close to red's second move is fine
-        GameState g5 = g4.WithMove(11, 9);
-        Assert.Equal(4, g5.MoveNumber);
-    }
 }

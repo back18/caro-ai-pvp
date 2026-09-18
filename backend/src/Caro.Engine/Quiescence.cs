@@ -36,7 +36,6 @@ public static partial class SearchEngine
         }
 
         List<Position> candidates = Candidates.GetTacticalCandidates(sb, player);
-        candidates = Candidates.FilterOpenRule(candidates, sb, player);
         foreach (Position move in candidates)
         {
             if (monitor.ShouldStop())

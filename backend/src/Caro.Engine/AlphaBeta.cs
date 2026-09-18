@@ -205,7 +205,6 @@ public static partial class SearchEngine
         }
 
         List<Position> candidates = Candidates.GetCandidates(sb, Constants.Board.MaxSearchRadius);
-        candidates = Candidates.FilterOpenRule(candidates, sb, player);
         Position? ttMove = null;
         if (tt.Lookup(sb.Hash(), out TTEntry ttEntry))
         {

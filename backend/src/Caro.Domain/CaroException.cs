@@ -11,9 +11,6 @@ public sealed class PositionBoundsException()
 public sealed class GameOverException()
     : CaroException("game is over");
 
-public sealed class OpenRuleException()
-    : CaroException("open rule violation");
-
 public sealed class GameNotFoundException()
     : CaroException("game not found");
 

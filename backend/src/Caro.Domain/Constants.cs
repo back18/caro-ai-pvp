@@ -8,7 +8,6 @@ public static partial class Constants
         public const int WinLength = 5;
         public const int LineLength = 2 * WinLength + 1;
         public const int MaxMoves = Size * Size;
-        public const int OpenRuleMin = 3;
         public const int MaxSearchRadius = 2;
     }
 

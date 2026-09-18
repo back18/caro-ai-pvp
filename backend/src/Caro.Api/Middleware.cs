@@ -49,7 +49,7 @@ public sealed class ErrorMappingMiddleware(RequestDelegate next, ILogger<ErrorMa
                     await ResponseJson.Write(http, 429, new ErrorResponse { Error = "too_many_games", Message = e.Message });
                     break;
                 case CellOccupiedException or PositionBoundsException or GameOverException
-                    or OpenRuleException or InvalidLevelException:
+                    or InvalidLevelException:
                     await ResponseJson.Write(http, 400, new ErrorResponse { Error = "bad_request", Message = e.Message });
                     break;
                 case NotPlayerTurnException:

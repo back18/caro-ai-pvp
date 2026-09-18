@@ -42,8 +42,8 @@ public class PonderSessionTests
         s.ApplyAIMove(x, y, player);
     }
 
-    // LegalAlternativeReply returns an empty cell that satisfies the open
-    // rule and differs from the predicted reply.
+    // LegalAlternativeReply returns any empty cell other than the predicted
+    // reply.
     private static Position LegalAlternativeReply(Board b, Position predicted)
     {
         for (int y = 0; y < Constants.Board.Size; y++)
@@ -55,10 +55,7 @@ public class PonderSessionTests
                 {
                     continue;
                 }
-                if (OpenRule.IsValidSecondMove(b, x, y))
-                {
-                    return p;
-                }
+                return p;
             }
         }
         Assert.Fail("no alternative legal reply found");

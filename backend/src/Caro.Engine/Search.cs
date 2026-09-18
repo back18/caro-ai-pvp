@@ -14,7 +14,6 @@ public static partial class SearchEngine
     {
         SearchBoard sb = new(b);
         List<Position> candidates = Candidates.GetCandidates(sb, Constants.Board.MaxSearchRadius);
-        candidates = Candidates.FilterOpenRule(candidates, sb, player);
 
         if (candidates.Count == 0)
         {
