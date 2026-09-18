@@ -1,0 +1,270 @@
+{
+  "config": {
+    "games": 20,
+    "redDifficulty": 1,
+    "blueDifficulty": 5,
+    "timeControl": "3+2",
+    "seed": 20260821,
+    "maxMoves": 200
+  },
+  "summary": {
+    "aWins": 2,
+    "bWins": 18,
+    "draws": 0,
+    "errored": 0,
+    "redWins": 12,
+    "blueWins": 8,
+    "reasons": {
+      "win": 20
+    },
+    "aWinRateDecisive": 0.1,
+    "aWinRate95CI": {
+      "low": 0.027866481213768224,
+      "high": 0.3010336452284873
+    },
+    "avgMoves": 28,
+    "avgTime": 68.275
+  },
+  "results": [
+    {
+      "gameId": "d638b289d8db31f2",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 26,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 48.1,
+      "errored": false,
+      "swap": false,
+      "index": 1
+    },
+    {
+      "gameId": "49c47f66aa150efc",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 27,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 46.8,
+      "errored": false,
+      "swap": true,
+      "index": 2
+    },
+    {
+      "gameId": "58825468fd572dda",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 40,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 77.5,
+      "errored": false,
+      "swap": false,
+      "index": 3
+    },
+    {
+      "gameId": "56672bbbbe59d63e",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 27,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 53.8,
+      "errored": false,
+      "swap": true,
+      "index": 4
+    },
+    {
+      "gameId": "fad7610365e87ed2",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 43,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 151.4,
+      "errored": false,
+      "swap": false,
+      "index": 5
+    },
+    {
+      "gameId": "28e6a268afc8a549",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 19,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 40.2,
+      "errored": false,
+      "swap": true,
+      "index": 6
+    },
+    {
+      "gameId": "394edfef78f735b9",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 14,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 43.4,
+      "errored": false,
+      "swap": false,
+      "index": 7
+    },
+    {
+      "gameId": "5342d40a5db62c8f",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 17,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 25.5,
+      "errored": false,
+      "swap": true,
+      "index": 8
+    },
+    {
+      "gameId": "6c8e0d1572c52dac",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 24,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 57,
+      "errored": false,
+      "swap": false,
+      "index": 9
+    },
+    {
+      "gameId": "cdde2fe763f5b3e9",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 23,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 57.1,
+      "errored": false,
+      "swap": true,
+      "index": 10
+    },
+    {
+      "gameId": "04de54fd6b8fc04e",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 111,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 293.6,
+      "errored": false,
+      "swap": false,
+      "index": 11
+    },
+    {
+      "gameId": "5589e07d0bb19d38",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 19,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 55.1,
+      "errored": false,
+      "swap": true,
+      "index": 12
+    },
+    {
+      "gameId": "df9adb4b621eda56",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 26,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 64.3,
+      "errored": false,
+      "swap": false,
+      "index": 13
+    },
+    {
+      "gameId": "109884d948578378",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 19,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 56.3,
+      "errored": false,
+      "swap": true,
+      "index": 14
+    },
+    {
+      "gameId": "4dc452b3d156d0af",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 22,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 56.3,
+      "errored": false,
+      "swap": false,
+      "index": 15
+    },
+    {
+      "gameId": "e5e2b9315edf3c15",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 21,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 61.4,
+      "errored": false,
+      "swap": true,
+      "index": 16
+    },
+    {
+      "gameId": "359f829e4722e7a2",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 16,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 43.5,
+      "errored": false,
+      "swap": false,
+      "index": 17
+    },
+    {
+      "gameId": "c8de6de7e47b2941",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 25,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 33.8,
+      "errored": false,
+      "swap": true,
+      "index": 18
+    },
+    {
+      "gameId": "c735b24daf38cfa9",
+      "redDiff": 1,
+      "blueDiff": 5,
+      "moves": 22,
+      "winner": "blue",
+      "reason": "win",
+      "elapsedSeconds": 61.2,
+      "errored": false,
+      "swap": false,
+      "index": 19
+    },
+    {
+      "gameId": "35b90c9166086bc2",
+      "redDiff": 5,
+      "blueDiff": 1,
+      "moves": 19,
+      "winner": "red",
+      "reason": "win",
+      "elapsedSeconds": 39.2,
+      "errored": false,
+      "swap": true,
+      "index": 20
+    }
+  ]
+}
