@@ -2,6 +2,21 @@ using Caro.Domain;
 
 namespace Caro.Engine;
 
+/// <summary>
+/// What a search score proves about the side to move.
+/// </summary>
+public enum SearchVerdict
+{
+    /// <summary>No forced result: the score is a heuristic judgement.</summary>
+    None = 0,
+
+    /// <summary>The side to move is proven to win.</summary>
+    ForcedWin = 1,
+
+    /// <summary>The side to move is proven to lose.</summary>
+    ForcedLoss = 2,
+}
+
 public struct SearchConfig
 {
     public int MaxDepth { get; set; }
@@ -27,12 +42,12 @@ public struct SearchStats
     public int SearchScore { get; set; }
 
     /// <summary>
-    /// Whether <see cref="SearchScore"/> represents a proven forced win rather
-    /// than a heuristic judgement. Derived rather than stored so every
-    /// construction site agrees by construction, and so callers outside this
-    /// assembly need no knowledge of the score encoding.
+    /// Whether <see cref="SearchScore"/> proves a forced result — for either
+    /// side — rather than being a heuristic judgement. Derived rather than
+    /// stored so every construction site agrees by construction, and so
+    /// callers outside this assembly need no knowledge of the score encoding.
     /// </summary>
-    public bool HasForcedWin => MateScore.IsForcedWinScore(SearchScore);
+    public SearchVerdict Verdict => MateScore.VerdictOf(SearchScore);
 
     public string MoveType { get; set; } = "";
     public double TableHitRate { get; set; }

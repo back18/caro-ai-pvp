@@ -87,6 +87,23 @@ internal static class MateScore
     internal static bool IsForcedWinScore(int score) =>
         score >= MateFloor && score <= MateCeiling;
 
+    /// <summary>
+    /// Classifies a score. The mate band is symmetric, so a forced loss is
+    /// simply a win score negated.
+    /// </summary>
+    internal static SearchVerdict VerdictOf(int score)
+    {
+        if (IsForcedWinScore(score))
+        {
+            return SearchVerdict.ForcedWin;
+        }
+        if (IsForcedWinScore(-score))
+        {
+            return SearchVerdict.ForcedLoss;
+        }
+        return SearchVerdict.None;
+    }
+
     internal static int AdjustForStore(int score, int plyFromRoot)
     {
         if (score > MateCeiling || score < -MateCeiling)

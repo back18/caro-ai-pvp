@@ -104,7 +104,7 @@ public class PvTableTests
             b, Player.Red, opts, tt, new SearchHeuristics(), CancellationToken.None);
 
         Assert.Equal(MoveTypes.Vcf, stats.MoveType);
-        Assert.True(stats.HasForcedWin, "a VCF result is a proven forced win");
+        Assert.Equal(SearchVerdict.ForcedWin, stats.Verdict);
         Assert.Single(stats.PrincipalVariation);
         Assert.Equal(x, stats.PrincipalVariation[0].X);
         Assert.Equal(y, stats.PrincipalVariation[0].Y);
